@@ -20,11 +20,18 @@ Non-items such as `use`, macros, or foreign modules are left unchanged.
 
 This crate is also, `unwrap`, `expect`, and `panic!()` deny use.
 
-# Use case
+## Use case
 
 This was originally written to be injected around user-submitted code in a code runner
 so that unit tests could access everything the user wrote. There may be other uses but
 I'm not quite sure what they might be yet.
+
+## Feature Flags
+
+This crate provides two feature flags:
+
+- `std` - used for enabling stdlib support, enabled by default
+- `unstable` - used for enabling unstable features (trait aliases, impl-associated types) on nightly compilers that are using these features
 
 ## Example
 
