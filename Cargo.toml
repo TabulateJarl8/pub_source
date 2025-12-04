@@ -24,6 +24,14 @@ default = ["std"]
 std = []
 unstable = []
 
+[profile.dev.build-override]
+codegen-units = 1
+opt-level = 3
+
+[profile.release.build-override]
+codegen-units = 1
+opt-level = 3
+
 [lints.clippy]
 pedantic = { level = "deny", priority = -1 }
 nursery = { level = "deny", priority = -1 }
