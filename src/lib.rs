@@ -10,10 +10,11 @@ use syn::{parse_macro_input, parse_quote, File, Item};
 ///
 /// - Functions become `pub fn`
 /// - Structs become `pub struct`, and all of their fields become public
-/// - Enums, types, traits (and trait aliases), unions, statics, and constants become `pub`
+/// - Enums, types, traits (and trait aliases if the `unstable` feature is enabled), unions, statics, and constants become `pub`
 /// - Modules become `pub mod` and everything underneath them recursively becomes `pub`
 /// - `impl` blocks have all inner items made public (`fn`, `const`, `type`), unless implementing a
 ///   trait
+/// - `impl`-associated types are made `pub` if the `unstable` feature is enabled
 ///
 ///
 /// # Example
@@ -85,7 +86,11 @@ fn make_item_public(item: &mut Item) {
                         impl_item_const.vis = parse_quote!(pub);
                     }
                     syn::ImplItem::Fn(impl_item_fn) => impl_item_fn.vis = parse_quote!(pub),
+
+                    // impl-associated types are unstable
+                    #[cfg(feature = "unstable")]
                     syn::ImplItem::Type(impl_item_type) => impl_item_type.vis = parse_quote!(pub),
+
                     _ => (),
                 });
             }
@@ -103,7 +108,11 @@ fn make_item_public(item: &mut Item) {
                 .iter_mut()
                 .for_each(|f| f.vis = parse_quote!(pub));
         }
+
+        // trait aliases are unstable
+        #[cfg(feature = "unstable")]
         Item::TraitAlias(item_trait_alias) => item_trait_alias.vis = parse_quote!(pub),
+
         Item::Macro(_)
         | Item::ForeignMod(_)
         | Item::Use(_)

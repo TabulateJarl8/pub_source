@@ -2,21 +2,32 @@ name: Rust
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toolchain: [stable, nightly]
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+
+      - name: Test Stable
+        if: matrix.toolchain == 'stable'
+        run: cargo test --verbose
+      - name: Test no-std
+        if: matrix.toolchain == 'stable'
+        run: cargo test --verbose --no-default-features
+      - name: Test Nightly
+        if: matrix.toolchain == 'nightly'
+        run: cargo test --verbose --features unstable
