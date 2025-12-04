@@ -6,7 +6,7 @@ description = "Make everything public"
 license = "MIT"
 repository = "https://github.com/TabulateJarl8/pub_source"
 readme = "README.md"
-keywords = ["macro", "visibility", "testing"]
+keywords = ["macro", "visibility", "testing", "no_std"]
 categories = ["rust-patterns", "no-std"]
 
 [dependencies]

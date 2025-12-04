@@ -1,10 +1,8 @@
 # `pub_source` - Make Everything Public
 
-`pub_source` provides the `make_public!` procedural macro, which rewrites a block
-of Rust source code so that all top level items become public.
+`pub_source` provides the `make_public!` procedural macro, which rewrites a block of Rust source code so that all top level items become public.
 
-This macro parses the input as a full `syn::File` and rewrites the following kinds
-of items to `pub`:
+This macro parses the input as a full `syn::File` and rewrites the following kinds of items to `pub`:
 
 - functions
 - structs and all of their fields
@@ -20,22 +18,13 @@ Non-items such as `use`, macros, or foreign modules are left unchanged.
 
 This crate is also, `unwrap`, `expect`, and `panic!()` deny use.
 
-## Use case
+## Usage
 
-This was originally written to be injected around user-submitted code in a code runner
-so that unit tests could access everything the user wrote. There may be other uses but
-I'm not quite sure what they might be yet.
+```sh
+cargo add pub_source
+```
 
-## Feature Flags
-
-This crate provides two feature flags:
-
-- `std` - used for enabling stdlib support, enabled by default
-- `unstable` - used for enabling unstable features (trait aliases, impl-associated types) on nightly compilers that are using these features
-
-## Example
-
-Input:
+Then the crate can be used as follows:
 
 ```rust
 pub_source::make_public! {
@@ -70,3 +59,16 @@ impl Thing {
     }
 }
 ```
+
+This was originally written to be injected around user-submitted code in a code runner so that unit tests could access everything the user wrote. There may be other uses but I'm not quite sure what they might be yet.
+
+## Feature Flags
+
+This crate provides two feature flags:
+
+- `std` - used for enabling stdlib support, enabled by default
+- `unstable` - used for enabling unstable features (trait aliases, impl-associated types) on nightly compilers that are using these features
+
+## License
+
+This crate is licensed under the MIT license
