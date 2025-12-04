@@ -1,9 +1,9 @@
 # `pub_source` - Make Everything Public
 
-`pub_source` provides the [`make_public!`] procedural macro, which rewrites a block
+`pub_source` provides the `make_public!` procedural macro, which rewrites a block
 of Rust source code so that all top level items become public.
 
-This macro parses the input as a full [`syn::File`] and rewrites the following kinds
+This macro parses the input as a full `syn::File` and rewrites the following kinds
 of items to `pub`:
 
 - functions
