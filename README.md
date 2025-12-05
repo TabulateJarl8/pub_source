@@ -1,8 +1,15 @@
 # `pub_source` - Make Everything Public
 
-<center>
-<img src="branding/logo_embedded_font.svg" alt="pub_source logo" />
-</center>
+<p align="center">
+    <img src="branding/logo_embedded_font.svg" alt="pub_source logo" />
+</p>
+<p align="center">
+        <a href="https://crates.io/crates/pub_source"><img alt="crates.io version" src="https://img.shields.io/crates/v/pub_source" /></a>
+        <a href="./LICENSE"><img alt="License" src="https://img.shields.io/crates/l/pub_source" /></a>
+        <a href="https://GitHub.com/TabulateJarl8/pub_source/issues/"><img alt="GitHub Issues" src="https://img.shields.io/github/issues/TabulateJarl8/pub_source" /></a>
+        <a href="https://docs.rs/pub_source"><img alt="docs.rs build status" src="https://img.shields.io/docsrs/pub_source" /></a>
+        <a href="https://github.com/TabulateJarl8/pub_source/actions/workflows/test.yml"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/TabulateJarl8/pub_source/test.yml?label=tests" /></a>
+</p>
 
 `pub_source` provides the `make_public!` procedural macro, which rewrites a block of Rust source code so that all top level items become public.
 
