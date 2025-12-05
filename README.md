@@ -16,7 +16,7 @@ This macro parses the input as a full `syn::File` and rewrites the following kin
 
 Non-items such as `use`, macros, or foreign modules are left unchanged.
 
-This crate also denies use of `unwrap`, `expect`, and `panic!()`.
+This crate also denies the use of `unwrap`, `expect`, and `panic!()`.
 
 ## Usage
 
