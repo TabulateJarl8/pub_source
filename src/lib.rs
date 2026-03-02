@@ -72,7 +72,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, parse_quote, File, Item};
+use syn::{parse_macro_input, token, File, Item, Visibility};
 
 /// Recursively makes all top level items in a source public.
 ///
@@ -130,52 +130,54 @@ pub fn make_public(input: TokenStream) -> TokenStream {
 }
 
 fn make_item_public(item: &mut Item) {
+    let p = Visibility::Public(token::Pub::default());
+
     match item {
-        Item::Fn(func) => func.vis = parse_quote!(pub),
+        Item::Fn(func) => func.vis = p.clone(),
         Item::Mod(m) => {
-            m.vis = parse_quote!(pub);
+            m.vis = p.clone();
             if let Some((_, items)) = &mut m.content {
                 items.iter_mut().for_each(make_item_public);
             }
         }
         Item::Struct(s) => {
-            s.vis = parse_quote!(pub);
-            s.fields.iter_mut().for_each(|f| f.vis = parse_quote!(pub));
+            s.vis = p.clone();
+            s.fields.iter_mut().for_each(|f| f.vis = p.clone());
         }
         Item::Impl(i) => {
             if i.trait_.is_none() {
                 // only make non-trait impls public
                 i.items.iter_mut().for_each(|item| match item {
                     syn::ImplItem::Const(impl_item_const) => {
-                        impl_item_const.vis = parse_quote!(pub);
+                        impl_item_const.vis = p.clone();
                     }
-                    syn::ImplItem::Fn(impl_item_fn) => impl_item_fn.vis = parse_quote!(pub),
+                    syn::ImplItem::Fn(impl_item_fn) => impl_item_fn.vis = p.clone(),
 
                     // impl-associated types are unstable
                     #[cfg(feature = "unstable")]
-                    syn::ImplItem::Type(impl_item_type) => impl_item_type.vis = parse_quote!(pub),
+                    syn::ImplItem::Type(impl_item_type) => impl_item_type.vis = p.clone(),
 
                     _ => (),
                 });
             }
         }
-        Item::Const(item_const) => item_const.vis = parse_quote!(pub),
-        Item::Enum(item_enum) => item_enum.vis = parse_quote!(pub),
-        Item::Static(item_static) => item_static.vis = parse_quote!(pub),
-        Item::Trait(item_trait) => item_trait.vis = parse_quote!(pub),
-        Item::Type(item_type) => item_type.vis = parse_quote!(pub),
+        Item::Const(item_const) => item_const.vis = p.clone(),
+        Item::Enum(item_enum) => item_enum.vis = p.clone(),
+        Item::Static(item_static) => item_static.vis = p.clone(),
+        Item::Trait(item_trait) => item_trait.vis = p.clone(),
+        Item::Type(item_type) => item_type.vis = p.clone(),
         Item::Union(item_union) => {
-            item_union.vis = parse_quote!(pub);
+            item_union.vis = p.clone();
             item_union
                 .fields
                 .named
                 .iter_mut()
-                .for_each(|f| f.vis = parse_quote!(pub));
+                .for_each(|f| f.vis = p.clone());
         }
 
         // trait aliases are unstable
         #[cfg(feature = "unstable")]
-        Item::TraitAlias(item_trait_alias) => item_trait_alias.vis = parse_quote!(pub),
+        Item::TraitAlias(item_trait_alias) => item_trait_alias.vis = p.clone(),
 
         Item::Macro(_)
         | Item::ForeignMod(_)
