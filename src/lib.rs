@@ -125,11 +125,7 @@ use syn::{parse_macro_input, parse_quote, File, Item};
 #[proc_macro]
 pub fn make_public(input: TokenStream) -> TokenStream {
     let mut ast = parse_macro_input!(input as File);
-
-    for item in &mut ast.items {
-        make_item_public(item);
-    }
-
+    ast.items.iter_mut().for_each(make_item_public);
     quote! { #ast }.into()
 }
 
@@ -139,9 +135,7 @@ fn make_item_public(item: &mut Item) {
         Item::Mod(m) => {
             m.vis = parse_quote!(pub);
             if let Some((_, items)) = &mut m.content {
-                for sub in items {
-                    make_item_public(sub);
-                }
+                items.iter_mut().for_each(make_item_public);
             }
         }
         Item::Struct(s) => {
